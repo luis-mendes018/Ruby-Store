@@ -31,13 +31,14 @@ class CheckoutsController < ApplicationController
 
       @cart_items.each do |cart_item|
         product = cart_item.product
-
         order.order_items.create!(
           product: product,
           product_name: product.name,
           unit_price: product.price,
           quantity: cart_item.quantity
         )
+
+        product.decrement!(:stock_quantity, cart_item.quantity)
       end
 
       @cart.cart_items.destroy_all
