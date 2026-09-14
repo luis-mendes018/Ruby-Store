@@ -55,15 +55,14 @@
     <%= form.file_field :image, accept: "image/png,image/jpeg,image/webp" %>
   </div>
 
-<% if product.image.attached? %> <div class="form-group"> <p>Imagem atual:</p>
-
-
-  <%= image_tag product.image,
-                style: "width: 150px; height: 150px; object-fit: cover; border-radius: 8px;" %>
-</div>
-
-
+<% if product.persisted? && product.image.attached? %>
+  <div class="form-group">
+    <p>Imagem atual:</p>
+    <%= image_tag product.image,
+                  style: "width: 150px; height: 150px; object-fit: cover; border-radius: 8px;" %>
+  </div>
 <% end %>
+
 
   <div class="form-group">
     <%= form.label :active, "Produto ativo" %>

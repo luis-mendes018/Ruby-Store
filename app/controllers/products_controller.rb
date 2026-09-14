@@ -61,7 +61,6 @@ end
 
 def catalog
   @categories = Category.order(:name)
-
   @products = Product
      .includes(:category)
      .where(active: true)
@@ -75,21 +74,23 @@ end
 def catalog
   @categories = Category.order(:name)
 
-  @products = Product
-  .includes(:category)
-  .where(active: true)
-  .order(:name)
+  products = Product
+              .includes(:category)
+              .where(active: true)
+              .order(:name)
 
   if params[:name].present?
-    @products = @products.where(
+    products = products.where(
       "products.name ILIKE ?",
       "%#{params[:name]}%"
     )
   end
 
   if params[:category_id].present?
-    @products = @products.where(category_id: params[:category_id])
+    products = products.where(category_id: params[:category_id])
   end
+
+  @pagy, @products = pagy(:offset, products, limit: 6)
 end
 
 def catalog_show
