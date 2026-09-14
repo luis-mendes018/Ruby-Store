@@ -1,0 +1,9 @@
+<h1>Editar categoria</h1>
+
+<div class="card" style="padding: 24px;">
+  <%= render "form", category: @category %>
+</div>
+
+<br>
+
+<%= link_to "Voltar", category_path(@category), class: "button button-secondary" %>

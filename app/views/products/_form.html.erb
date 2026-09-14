@@ -1,0 +1,74 @@
+<%= form_with model: product do |form| %>
+<% if product.errors.any? %> 
+<div class="errors"> 
+  <h2> <%= pluralize(product.errors.count, "erro") %> impediram o cadastro: </h2>
+
+
+  <ul>
+    <% product.errors.each do |error| %>
+      <li><%= error.full_message %></li>
+    <% end %>
+  </ul>
+</div>
+
+
+<% end %>
+
+  <div class="form-group">
+    <%= form.label :name, "Nome" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="form-group">
+   <div data-controller="image-resize">
+     <%= form.label :description, "Descrição" %>
+
+     <%= form.rich_text_area :description %>
+   </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price, "Preço" %>
+    <%= form.number_field :price, step: 0.01 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :stock_quantity, "Quantidade em estoque" %>
+    <%= form.number_field :stock_quantity, min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :category_id, "Categoria" %>
+
+
+<%= form.collection_select :category_id,
+                           @categories,
+                           :id,
+                           :name,
+                     { prompt: "Selecione uma categoria" } %>
+
+
+  </div>
+
+  <div class="form-group">
+    <%= form.label :image, "Imagem" %>
+    <%= form.file_field :image, accept: "image/png,image/jpeg,image/webp" %>
+  </div>
+
+<% if product.image.attached? %> <div class="form-group"> <p>Imagem atual:</p>
+
+
+  <%= image_tag product.image,
+                style: "width: 150px; height: 150px; object-fit: cover; border-radius: 8px;" %>
+</div>
+
+
+<% end %>
+
+  <div class="form-group">
+    <%= form.label :active, "Produto ativo" %>
+    <%= form.check_box :active %>
+  </div>
+
+<%= form.submit "Salvar", class: "button" %>
+<% end %>

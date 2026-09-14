@@ -1,0 +1,39 @@
+<div class="auth-page">
+  <div class="auth-card">
+
+<div class="auth-header">
+  <h1>Recuperar senha</h1>
+  <p>Informe seu e-mail para receber as instruções de redefinição.</p>
+</div>
+
+<% if flash[:alert] %>
+  <div class="auth-message auth-message-error">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<%= form_with url: passwords_path, class: "auth-form" do |form| %>
+
+  <div class="form-group">
+    <%= form.label :email_address, "E-mail" %>
+
+    <%= form.email_field :email_address,
+                        required: true,
+                        autofocus: true,
+                        autocomplete: "username",
+                        placeholder: "Digite seu e-mail",
+                        value: params[:email_address] %>
+  </div>
+
+  <%= form.submit "Enviar instruções",
+                  class: "button auth-submit" %>
+
+<% end %>
+
+<div class="auth-footer">
+  <%= link_to "Voltar para o login", new_session_path %>
+</div>
+
+
+  </div>
+</div>

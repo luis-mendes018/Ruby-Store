@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1><%= @product.name %></h1>
+</div>
+
+<div class="card" style="padding: 24px;">
+  <% if @product.image.attached? %>
+    <p>
+      <%= image_tag @product.image,
+                    style: "width: 250px; height: 250px; object-fit: cover; border-radius: 8px;" %>
+    </p>
+  <% end %>
+
+  <p>
+    <strong>Nome:</strong> <%= @product.name %>
+  </p>
+
+  <div class="product-description">
+    <strong>Descrição:</strong>
+
+    <div class="trix-content product-description-content">
+      <%= @product.description %>
+    </div>
+  </div>
+
+  <p>
+    <strong>Categoria:</strong> <%= @product.category.name %>
+  </p>
+
+  <p>
+    <strong>Preço:</strong>
+    <%= number_to_currency(@product.price, unit: "R$ ") %>
+  </p>
+
+  <p>
+    <strong>Estoque:</strong> <%= @product.stock_quantity %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= @product.active? ? "Ativo" : "Inativo" %>
+  </p>
+
+  <p>
+    <strong>Produto criado em:</strong>
+    <%= @product.created_at.strftime("%d/%m/%Y") %>
+  </p>
+</div>
+
+<br>
+
+<%= link_to "Voltar",
+            products_path,
+            class: "button button-secondary" %>
+
+<%= link_to "Editar",
+            edit_product_path(@product),
+            class: "button" %>

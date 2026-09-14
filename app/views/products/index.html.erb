@@ -1,0 +1,127 @@
+<div data-controller="modal">
+ 
+ <div class="page-header">
+  <div>
+    <h1>Produtos</h1>
+
+
+   <p class="record-count">
+   <%= @pagy.count %> produtos cadastrados
+   </p>
+
+
+  </div>
+
+ <%= link_to "Novo produto", new_product_path, class: "button" %>
+
+</div>
+
+<div class="search-container">
+  <%= form_with url: products_path, method: :get do |form| %>
+    <%= form.text_field :name,
+                        value: params[:name],
+                        placeholder: "Buscar produto..." %>
+
+<%= form.submit "Buscar", class: "button" %>
+
+<% if params[:name].present? %>
+  <%= link_to "Limpar", products_path, class: "button button-secondary" %>
+<% end %>
+
+
+<% end %>
+
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Imagem</th>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Preço</th>
+        <th>Estoque</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+ <tbody>
+  <% @products.each do |product| %>
+    <tr>
+      <td>
+        <% if product.image.attached? %>
+          <%= image_tag product.image,
+                        style: "width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" %>
+        <% else %>
+          —
+        <% end %>
+      </td>
+
+      <td><%= product.name %></td>
+
+      <td><%= product.category.name %></td>
+
+      <td>
+        <%= number_to_currency(product.price) %>
+      </td>
+
+      <td><%= product.stock_quantity %></td>
+
+      <td>
+        <%= product.active? ? "Ativo" : "Inativo" %>
+      </td>
+
+      <td>
+        <div class="actions">
+          <%= link_to "Visualizar",
+                      product_path(product),
+                      class: "button button-small" %>
+
+          <%= link_to "Editar",
+                      edit_product_path(product),
+                      class: "button button-small button-secondary" %>
+
+          <button type="button"
+                 class="button button-small button-danger"
+                 data-action="click->modal#open"
+                 data-delete-url="<%= product_path(product) %>">
+                 Excluir
+         </button>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+ </tbody>
+
+
+  </table>
+ </div>
+
+ <%== @pagy.series_nav %>
+ <dialog data-modal-target="dialog">
+   <h2>Excluir produto?</h2>
+ 
+   <p>
+     O produto será excluído permanentemente.
+     Essa ação não pode ser desfeita.
+   </p>
+ 
+   <div class="actions">
+     <button type="button"
+             class="button button-secondary"
+             data-action="click->modal#close">
+       Cancelar
+     </button>
+ 
+     <a href="#"
+        class="button button-danger"
+        data-modal-target="deleteLink"
+        data-turbo-method="delete">
+       Excluir
+     </a>
+   </div>
+ </dialog>
+
+</div>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ruby Store Admin</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+     <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
+     <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div class="admin-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          Store
+        </div>
+
+        <nav class="sidebar-nav">
+          <%= link_to "Dashboard", "#", class: "sidebar-link" %>
+          <%= link_to "Produtos", products_path, class: "sidebar-link" %>
+          <%= link_to "Categorias", categories_path, class: "sidebar-link" %>
+        </nav>
+
+        <div class="sidebar-footer">
+          <%= link_to "Configurações", "#", class: "sidebar-link" %>
+
+            <%= link_to "Sair",
+            session_path,
+            data: { turbo_method: :delete },
+            class: "sidebar-link" %>
+        </div>
+      </aside>
+
+      <main class="admin-content">
+        <% if notice %>
+          <div class="notice">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

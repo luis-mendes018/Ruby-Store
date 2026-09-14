@@ -1,0 +1,83 @@
+<div class="cart">
+  <div class="cart-header">
+    <h1>Meu carrinho</h1>
+  </div>
+
+  <% if @cart.cart_items.empty? %>
+    <div class="cart-empty">
+      <p>Seu carrinho está vazio.</p>
+
+      <%= link_to "Continuar comprando",
+                  catalog_path,
+                  class: "button" %>
+    </div>
+  <% else %>
+    <div class="cart-items">
+      <% @cart.cart_items.includes(:product).each do |item| %>
+        <% product = item.product %>
+
+        <div class="cart-item">
+          <div class="cart-item-image">
+            <% if product.image.attached? %>
+              <%= image_tag product.image,
+                            alt: product.name %>
+            <% else %>
+              <div class="cart-item-image-placeholder">
+                Sem imagem
+              </div>
+            <% end %>
+          </div>
+
+          <div class="cart-item-info">
+            <h2>
+              <%= product.name %>
+            </h2>
+
+            <p class="cart-item-price">
+              <%= number_to_currency(product.price) %>
+            </p>
+
+            <p class="cart-item-quantity">
+              <%= button_to "-", decrease_cart_item_path(product), method: :patch, class: "button-small button-secondary" %>
+              <span class="quantity"><%= item.quantity %></span>
+              <%= button_to "+", increase_cart_item_path(product), method: :patch, class: "button-small button-secondary" %>
+            </p>
+          </div>
+
+          <div class="cart-item-subtotal">
+            <%= number_to_currency(product.price * item.quantity) %>
+          </div>
+
+          <div class="cart-item-actions">
+            <%= button_to "Remover",
+                          remove_cart_item_path(product),
+                          method: :delete,
+                          data: { confirm: "Tem certeza?" },
+                          class: "button button-danger button-small" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="cart-summary">
+      <div class="cart-total">
+        <span>Total</span>
+
+        <strong>
+          <%= number_to_currency(
+                @cart.cart_items.sum { |item| item.product.price * item.quantity }
+              ) %>
+        </strong>
+      </div>
+
+      <%= link_to "Continuar comprando",
+                  catalog_path,
+                  class: "button" %>
+
+      <%= link_to "Checkout",
+                  checkout_path,
+                  class: "button button-green" %>
+    </div>
+  <% end %>
+</div>
+

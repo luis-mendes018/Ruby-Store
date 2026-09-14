@@ -1,0 +1,87 @@
+<h1>Finalizar pedido</h1>
+
+<div class="checkout">
+  <section class="checkout-form">
+    <h2>Dados pessoais</h2>
+
+    <%= form_with url: checkout_path, method: :post do |form| %>
+      <div>
+        <%= form.label :name, "Nome" %>
+        <%= form.text_field :name, required: true, autocomplete: "name" %>
+      </div>
+
+      <div>
+        <%= form.label :email, "E-mail" %>
+        <%= form.email_field :email, required: true, autocomplete: "email" %>
+      </div>
+
+      <h2>Endereço</h2>
+
+      <div>
+        <%= form.label :cep, "CEP" %>
+        <%= form.text_field :cep,
+              required: true,
+              autocomplete: "postal-code",
+              inputmode: "numeric" %>
+      </div>
+
+      <div>
+        <%= form.label :street, "Rua" %>
+        <%= form.text_field :street,
+              required: true,
+              autocomplete: "street-address" %>
+      </div>
+
+      <div>
+        <%= form.label :number, "Número" %>
+        <%= form.text_field :number,
+              required: true,
+              autocomplete: "address-line2" %>
+      </div>
+
+      <div>
+        <%= form.label :complement, "Complemento" %>
+        <%= form.text_field :complement,
+              autocomplete: "address-line2" %>
+      </div>
+
+      <div>
+        <%= form.label :neighborhood, "Bairro" %>
+        <%= form.text_field :neighborhood, required: true %>
+      </div>
+
+      <div>
+        <%= form.label :city, "Cidade" %>
+        <%= form.text_field :city,
+              required: true,
+              autocomplete: "address-level2" %>
+      </div>
+
+      <div>
+        <%= form.label :state, "Estado" %>
+        <%= form.text_field :state,
+              required: true,
+              autocomplete: "address-level1" %>
+      </div>
+
+      <%= form.submit "Finalizar pedido" %>
+    <% end %>
+  </section>
+
+  <aside class="checkout-summary">
+    <h2>Resumo do pedido</h2>
+
+    <% @cart_items.each do |item| %>
+      <div>
+        <span>
+          <%= item.product.name %> × <%= item.quantity %>
+        </span>
+
+        <span>
+          <%= number_to_currency(item.product.price * item.quantity) %>
+        </span>
+      </div>
+    <% end %>
+  </aside>
+</div>
+

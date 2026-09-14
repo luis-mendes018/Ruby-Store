@@ -1,0 +1,64 @@
+<div class="catalog">
+  <div class="catalog-header">
+    <h1>Catálogo</h1>
+    <p>Confira nossos produtos.</p>
+  </div>
+
+  <div class="catalog-filters">
+    <%= form_with url: catalog_path, method: :get, class: "catalog-filters-form" do |form| %>
+      <div class="catalog-search">
+        <%= form.text_field :name,
+                            value: params[:name],
+                            placeholder: "Pesquisar produto..." %>
+        <%= form.submit "Pesquisar", class: "button" %>
+      </div>
+
+      <div class="catalog-filter-group">
+        <%= form.label :category_id, "Categoria" %>
+        <%= form.select :category_id,
+                        [["Todas as categorias", ""]] + @categories.map { |c| [c.name, c.id] },
+                        { selected: params[:category_id] },
+                        { onchange: "this.form.submit()" } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="product-grid">
+    <% @products.each do |product| %>
+      <div class="product-card">
+        <% if product.image.attached? %>
+          <%= image_tag product.image, class: "product-card-image" %>
+        <% else %>
+          <div class="product-card-image product-card-image-placeholder">
+            Sem imagem
+          </div>
+        <% end %>
+
+        <div class="product-card-body">
+          <span class="product-card-category">
+            <%= product.category.name %>
+          </span>
+
+          <h2><%= product.name %></h2>
+
+          <p class="product-card-price">
+            <%= number_to_currency(product.price) %>
+          </p>
+
+          <% if product.stock_quantity > 0 %>
+            <span class="product-card-stock">
+              <%= product.stock_quantity %> em estoque
+            </span>
+          <% else %>
+            <span class="product-card-stock product-card-stock-unavailable">
+              Indisponível
+            </span>
+          <% end %>
+          <%= link_to "Ver detalhes",
+            catalog_product_path(product),
+            class: "button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
